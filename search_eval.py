@@ -60,12 +60,19 @@ if __name__ == '__main__':
     query_start = query_cfg.get('query-id-start', 0)
 
     query = metapy.index.Document()
+    #ps = []
     print('Running queries')
     with open(query_path) as query_file:
         for query_num, line in enumerate(query_file):
             query.content(line.strip())
             results = ranker.score(idx, query, top_k)
             avg_p = ev.avg_p(results, query_start + query_num, top_k)
+    #        ps.append(avg_p)
             print("Query {} average precision: {}".format(query_num + 1, avg_p))
     print("Mean average precision: {}".format(ev.map()))
     print("Elapsed: {} seconds".format(round(time.time() - start_time, 4)))
+
+    # with open('inl2.avg_p.txt', 'w') as file:
+    #     for item in ps:
+    #         file.write(str(item) + '\n')  # Add a newline character to separate items
+
